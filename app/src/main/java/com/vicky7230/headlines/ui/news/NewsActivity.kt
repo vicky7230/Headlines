@@ -53,18 +53,18 @@ class NewsActivity : AppCompatActivity() {
         setSupportActionBar(toolbar as Toolbar?)
 
         refresh_layout.setOnRefreshListener {
-            getHeadlines()
+            getArticles()
         }
 
         article_list.layoutManager = linearLayoutManager
         article_list.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         article_list.adapter = articlesAdapter
 
-        getHeadlines()
+        getArticles()
 
     }
 
-    private fun getHeadlines() {
+    private fun getArticles() {
         newsViewModel.getHeadlines()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

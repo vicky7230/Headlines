@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class AppApiHelper @Inject constructor(private val apiService: ApiService) : ApiHelper {
 
-    override fun getHeadLines(): Observable<Headlines> {
-        return apiService.getHeadLines("in", Config.API_KEY)
+    override fun getArticles(): Observable<Headlines?> {
+        return apiService.getArticles("in", Config.API_KEY)
     }
 }

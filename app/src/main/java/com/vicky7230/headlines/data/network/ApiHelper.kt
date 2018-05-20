@@ -4,5 +4,5 @@ import com.vicky7230.headlines.data.network.model.Headlines
 import io.reactivex.Observable
 
 interface ApiHelper {
-    fun getHeadLines(): Observable<Headlines>
+    fun getArticles(): Observable<Headlines?>
 }
