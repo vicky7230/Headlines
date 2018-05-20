@@ -5,8 +5,9 @@ import io.reactivex.Flowable
 
 interface DbHelper {
 
-    fun insertArticle(articles: MutableList<Article>): List<Long>
+    fun insertArticles(articles: MutableList<Article>): List<Long>
 
-    fun selectArticles(): Flowable<MutableList<Article>>
+    fun selectArticles(): List<Article>
 
+    fun deleteArticles()
 }

@@ -3,10 +3,13 @@ package com.vicky7230.headlines.data.network.model
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import android.arch.persistence.room.TypeConverters
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.vicky7230.headlines.data.db.room.Converters
 
 @Entity(tableName = "articles")
+@TypeConverters(Converters::class)
 data class Article(
         @PrimaryKey(autoGenerate = true)
         var id: Long,

@@ -10,15 +10,20 @@ import javax.inject.Inject
 
 class AppDataManager @Inject constructor(private val appApiHelper: AppApiHelper, private val appDbHelper: AppDbHelper) : DataManager {
 
-    override fun getArticles(): Observable<Headlines> {
+    override fun getArticles(): Observable<Headlines?> {
         return appApiHelper.getArticles()
     }
 
-    override fun insertArticle(articles: MutableList<Article>): List<Long> {
-        return appDbHelper.insertArticle(articles)
+    override fun insertArticles(articles: MutableList<Article>): List<Long> {
+        return appDbHelper.insertArticles(articles)
     }
 
-    override fun selectArticles(): Flowable<MutableList<Article>> {
+    override fun selectArticles(): List<Article> {
         return appDbHelper.selectArticles()
     }
+
+    override fun deleteArticles() {
+        appDbHelper.deleteArticles()
+    }
+
 }

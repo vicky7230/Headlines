@@ -11,8 +11,11 @@ import io.reactivex.Flowable
 interface ArticleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertArticle(articles: MutableList<Article>): List<Long>
+    fun insertArticles(articles: MutableList<Article>): List<Long>
 
     @Query("SELECT * FROM articles")
-    fun selectArticles(): Flowable<MutableList<Article>>
+    fun selectArticles(): List<Article>
+
+    @Query("DELETE FROM articles")
+    fun deleteArticles()
 }

@@ -2,6 +2,7 @@ package com.vicky7230.headlines.di.module
 
 import android.app.Application
 import android.arch.persistence.room.Room
+import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import com.vicky7230.headlines.HeadlinesApplication
 import com.vicky7230.headlines.data.AppDataManager
@@ -47,7 +48,9 @@ class ApplicationModule {
     @Provides
     @Singleton
     fun provideRoomDatabase(@ApplicationContext context: Context): AppDatabase {
-        return Room.databaseBuilder(context, AppDatabase::class.java, Config.DB_NAME).build()
+        return Room.databaseBuilder(context, AppDatabase::class.java, Config.DB_NAME)
+                .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
+                .build()
     }
 
     @Provides

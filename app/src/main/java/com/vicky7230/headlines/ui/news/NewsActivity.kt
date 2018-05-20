@@ -12,11 +12,11 @@ import com.vicky7230.headlines.data.DataManager
 import com.vicky7230.headlines.data.network.model.Article
 import com.vicky7230.headlines.data.network.model.Headlines
 import dagger.android.AndroidInjection
+import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_news.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -65,9 +65,11 @@ class NewsActivity : AppCompatActivity() {
     }
 
     private fun getArticles() {
-        newsViewModel.getHeadlines()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        Observable.concat(
+                newsViewModel.getArticlesFromDatabase(),
+                newsViewModel.getArticlesFromNetwork()
+        )
+                .observeOn(AndroidSchedulers.mainThread(), true)
                 .subscribe(object : Observer<Headlines?> {
                     override fun onComplete() {
                         refresh_layout.isRefreshing = false
