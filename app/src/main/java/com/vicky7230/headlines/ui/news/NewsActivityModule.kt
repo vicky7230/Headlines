@@ -9,10 +9,10 @@ import dagger.Provides
 @Module
 class NewsActivityModule {
 
-    /*@Provides
-    fun provideRecipesAdapter(): NewsAdapter {
-        return NewsAdapter(ArrayList())
-    }*/
+    @Provides
+    fun provideNewsAdapter(): ArticlesAdapter {
+        return ArticlesAdapter(ArrayList())
+    }
 
     @Provides
     fun provideLinearLayoutManager(@ApplicationContext context: Context): LinearLayoutManager {
