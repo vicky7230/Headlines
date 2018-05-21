@@ -54,6 +54,7 @@ class NewsActivity : AppCompatActivity() {
 
         refresh_layout.setOnRefreshListener {
             getArticles()
+            TODO("convert it to get articles from the network")
         }
 
         article_list.layoutManager = linearLayoutManager
