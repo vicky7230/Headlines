@@ -48,7 +48,7 @@ class NewsActivity : AppCompatActivity(), ArticlesAdapter.Callback {
                         application,
                         dataManager)
         ).get(NewsViewModel::class.java)
-
+        articlesAdapter.setCallback(this)
         init()
     }
 
