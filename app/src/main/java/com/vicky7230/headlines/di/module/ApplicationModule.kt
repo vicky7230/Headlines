@@ -4,7 +4,10 @@ import android.app.Application
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
+import android.support.customtabs.CustomTabsIntent
+import android.support.v4.content.ContextCompat
 import com.vicky7230.headlines.HeadlinesApplication
+import com.vicky7230.headlines.R
 import com.vicky7230.headlines.data.AppDataManager
 import com.vicky7230.headlines.data.Config
 import com.vicky7230.headlines.data.DataManager
@@ -37,6 +40,16 @@ class ApplicationModule {
     @Provides
     internal fun provideCompositeDisposable(): CompositeDisposable {
         return CompositeDisposable()
+    }
+
+    @Provides
+    fun provideCustomTabsIntent(@ApplicationContext context: Context): CustomTabsIntent {
+        return CustomTabsIntent.Builder()
+                .setShowTitle(true)
+                .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                .setSecondaryToolbarColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+                .addDefaultShareMenuItem()
+                .build()
     }
 
     @Provides

@@ -1,7 +1,9 @@
 package com.vicky7230.headlines.ui.news
 
 import android.arch.lifecycle.ViewModelProviders
+import android.net.Uri
 import android.os.Bundle
+import android.support.customtabs.CustomTabsIntent
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -21,7 +23,7 @@ import kotlinx.android.synthetic.main.activity_news.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class NewsActivity : AppCompatActivity() {
+class NewsActivity : AppCompatActivity(), ArticlesAdapter.Callback {
 
     @Inject
     lateinit var dataManager: DataManager
@@ -31,6 +33,8 @@ class NewsActivity : AppCompatActivity() {
     lateinit var linearLayoutManager: LinearLayoutManager
     @Inject
     lateinit var articlesAdapter: ArticlesAdapter
+    @Inject
+    lateinit var customTabsIntent: CustomTabsIntent
 
     private lateinit var newsViewModel: NewsViewModel
 
@@ -53,8 +57,27 @@ class NewsActivity : AppCompatActivity() {
         setSupportActionBar(toolbar as Toolbar?)
 
         refresh_layout.setOnRefreshListener {
-            getArticles()
-            TODO("convert it to get articles from the network")
+            newsViewModel.getArticlesFromNetwork()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(object : Observer<Headlines?> {
+                        override fun onComplete() {
+                            refresh_layout.isRefreshing = false
+                        }
+
+                        override fun onSubscribe(d: Disposable) {
+                            refresh_layout.isRefreshing = true
+                            compositeDisposable.add(d)
+                        }
+
+                        override fun onNext(t: Headlines) {
+                            articlesAdapter.addItems(t.articles as MutableList<Article>?)
+                        }
+
+                        override fun onError(e: Throwable) {
+                            refresh_layout.isRefreshing = false
+                            Timber.e(e.message)
+                        }
+                    })
         }
 
         article_list.layoutManager = linearLayoutManager
@@ -90,6 +113,10 @@ class NewsActivity : AppCompatActivity() {
                         Timber.e(e.message)
                     }
                 })
+    }
+
+    override fun onArticleClick(url: String) {
+        customTabsIntent.launchUrl(this, Uri.parse(url))
     }
 
     override fun onDestroy() {
