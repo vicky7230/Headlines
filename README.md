@@ -46,7 +46,8 @@ So we can create two observables observables to load data from :
 1. one will load data from the Database
 2. the other will fetch the data from the server
 
-```fun getArticlesFromDatabase(): Observable<Headlines?> {
+```
+    fun getArticlesFromDatabase(): Observable<Headlines?> {
            return Observable.defer { Observable.just(dataManager.selectArticles()) }
                    .subscribeOn(Schedulers.computation())
        }
@@ -59,7 +60,8 @@ So we can create two observables observables to load data from :
 
 And them concat these observables and observe them :
 
-```Observable.concat(
+```
+    Observable.concat(
                    newsViewModel.getArticlesFromDatabase(),
                    newsViewModel.getArticlesFromNetwork()
            )
