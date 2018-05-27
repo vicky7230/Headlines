@@ -22,4 +22,13 @@ In MVVM, ViewModel exposes streams of events to which the Views can bind to. Bec
 
 <img src="https://github.com/vicky7230/Headlines/blob/master/graphics/mvvm.png">
 
+## Offline functionality implementation
+
+In the app there are two sources of data :
+    1. a Local Database(implemented through Room)
+    2. a Server(implemented through Retrofit)
+
+So the results(data) that come out of the Database are very quick because the Database is locally available on your device. But the problem with having the results purely in the local Database is that they tend to be stale. The newest form of data is available from the Server. So typically what we also want to do is execute a network request and that network request, typically network requests take a longer time to complete, but once it completes we want to take those results and swap it out with the Local Database results. Doing this gives our app a snapy experience. So the user opens the app and immediately sees the results from the local database and the network request happens in the background and as the network request completes we swap the results. So if we want to do it in rxjava, how do we do it.
+
+
 
