@@ -34,7 +34,55 @@ In the app there are two sources of data :
 
 So the results(data) that come out of the Database are very quick because the Database is locally available on your device. But the problem with having the results purely in the local Database is that they tend to be stale. The newest form of data is available from the Server. So typically what we also want to do is execute a network request and that network request, typically network requests take a longer time to complete, but once it completes we want to take those results and swap it out with the Local Database results. Doing this gives our app a snapy experience. So the user opens the app and immediately sees the results from the local database and the network request happens in the background and as the network request completes we swap the results. So if we want to do it in rxjava, how do we do it.
 
+### Concat comes to rescue
 
+<img src="https://github.com/vicky7230/Headlines/blob/master/graphics/concat.png">
 
+The Concat operator concatenates the output of multiple Observables so that they act like a single Observable, with all of the items emitted by the first Observable being emitted before any of the items emitted by the second Observable (and so forth, if there are more than two).
 
+Concat waits to subscribe to each additional Observable that you pass to it until the previous Observable completes.
 
+So we can create two observables observables to load data from :
+1. one will load data from the Database
+2. the other will fetch the data from the server
+
+```fun getArticlesFromDatabase(): Observable<Headlines?> {
+           return Observable.defer { Observable.just(dataManager.selectArticles()) }
+                   .subscribeOn(Schedulers.computation())
+       }
+
+   fun getArticlesFromNetwork(): Observable<Headlines?> {
+           return dataManager.getArticles()
+                   .subscribeOn(Schedulers.io())
+       }
+```
+
+And them concat these observables and observe them :
+
+```Observable.concat(
+                   newsViewModel.getArticlesFromDatabase(),
+                   newsViewModel.getArticlesFromNetwork()
+           )
+                   .observeOn(AndroidSchedulers.mainThread(), true)
+                   .subscribe(object : Observer<Headlines?> {
+                       override fun onComplete() {
+                           refresh_layout.isRefreshing = false
+                       }
+
+                       override fun onSubscribe(d: Disposable) {
+                           refresh_layout.isRefreshing = true
+                           compositeDisposable.add(d)
+                       }
+
+                       override fun onNext(t: Headlines) {
+                           articlesAdapter.addItems(t.articles as MutableList<Article>?)
+                       }
+
+                       override fun onError(e: Throwable) {
+                           refresh_layout.isRefreshing = false
+                           Timber.e(e.message)
+                       }
+                   })
+```
+
+Study the repository to understand the implementation completely.
