@@ -8,11 +8,14 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
+import android.view.Menu
+import android.view.MenuItem
 import com.vicky7230.headlines.R
 import com.vicky7230.headlines.ViewModelFactory
 import com.vicky7230.headlines.data.DataManager
 import com.vicky7230.headlines.data.network.model.Article
 import com.vicky7230.headlines.data.network.model.Headlines
+import com.vicky7230.headlines.ui.about.AboutActivity
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -56,6 +59,8 @@ class NewsActivity : AppCompatActivity(), ArticlesAdapter.Callback {
 
         setSupportActionBar(toolbar as Toolbar?)
 
+        api_attribution_1.setHtml("Powered By <a href=\"https://newsapi.org\" title=\"News API\">News API</a>")
+
         refresh_layout.setOnRefreshListener {
             newsViewModel.getArticlesFromNetwork()
                     .observeOn(AndroidSchedulers.mainThread())
@@ -75,7 +80,7 @@ class NewsActivity : AppCompatActivity(), ArticlesAdapter.Callback {
 
                         override fun onError(e: Throwable) {
                             refresh_layout.isRefreshing = false
-                            Timber.e(e.message)
+                            Timber.e(e)
                         }
                     })
         }
@@ -110,13 +115,29 @@ class NewsActivity : AppCompatActivity(), ArticlesAdapter.Callback {
 
                     override fun onError(e: Throwable) {
                         refresh_layout.isRefreshing = false
-                        Timber.e(e.message)
+                        Timber.e(e)
                     }
                 })
     }
 
     override fun onArticleClick(url: String) {
         customTabsIntent.launchUrl(this, Uri.parse(url))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.news_activity_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.info -> {
+                startActivity(AboutActivity.getStartIntent(this))
+                true
+            }
+            else ->
+                super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onDestroy() {

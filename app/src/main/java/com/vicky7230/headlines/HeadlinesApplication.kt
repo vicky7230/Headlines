@@ -2,7 +2,6 @@ package com.vicky7230.headlines
 
 import android.app.Activity
 import android.app.Application
-import com.amitshekhar.DebugDB
 import com.vicky7230.headlines.di.component.DaggerApplicationComponent
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -25,8 +24,6 @@ class HeadlinesApplication : Application(), HasActivityInjector {
                 .inject(this)
 
         Timber.plant(Timber.DebugTree())
-
-        DebugDB.getAddressLog()
     }
 
     override fun activityInjector(): AndroidInjector<Activity> {

@@ -6,4 +6,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="searchEditTextTheme" parent="AppTheme">
+        <item name="colorAccent">@android:color/black</item>
+    </style>
+
+    <style name="AttributionsTheme" parent="AppTheme">
+        <item name="colorAccent">@android:color/black</item>
+    </style>
 </resources>
