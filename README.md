@@ -11,6 +11,10 @@ Simple Headlines app to showcase MVVM(Model-View-ViewModel) architecture in andr
   <img src="https://github.com/vicky7230/Headlines/blob/master/graphics/3.png" width="280">
 </p>
 
+# Get it on google play
+
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" width="200">](https://play.google.com/store/apps/details?id=com.vicky7230.headlines)
+
 ## The Model-View-ViewModel Pattern
 The main components in the MVVM pattern are:
 * The View — that informs the ViewModel about the user’s actions
